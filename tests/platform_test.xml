@@ -1,0 +1,15 @@
+<?xml version='1.0'?>
+<!DOCTYPE platform SYSTEM "https://simgrid.org/simgrid.dtd">
+<platform version="4.1">
+  <config>
+    <prop id="network/crosstraffic" value="0"/>
+    <prop id="network/weight-S"     value="0.0"/>
+    <prop id="network/TCP-gamma"    value="0.0"/>
+  </config>
+  <zone id="world" routing="Full">
+    <host id="node-0" speed="100Gf"/>
+    <host id="node-1" speed="100Gf"/>
+    <link id="wire" bandwidth="1GBps" latency="100us"/>
+    <route src="node-0" dst="node-1"><link_ctn id="wire"/></route>
+  </zone>
+</platform>

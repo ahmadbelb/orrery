@@ -11,18 +11,18 @@ fail=0
 ok()  { echo "  ok    $1"; }
 bad() { echo "  FAIL  $1"; fail=$(( fail + 1 )); }
 
-echo "== 1/3 run the example on 4 simulated GPUs"
+echo "== 1/4 run the example on 4 simulated GPUs"
 if bash "$root/examples/simple/run.sh" > "$tmp/run.log" 2>&1; then ok "run completed"
 else bad "run failed; last lines:"; tail -15 "$tmp/run.log"; fi
 
-echo "== 2/3 simulated time"
+echo "== 2/4 simulated time"
 REF=0.005223
 got="$(sed -n 's/.*simulated time \([0-9.]*\) s.*/\1/p' "$tmp/run.log" | head -1)"
 if [[ -n "$got" ]] && awk -v g="$got" -v r="$REF" 'BEGIN{d=g-r; if(d<0)d=-d; exit !(d<0.00005)}'; then
   ok "simulated time $got s (reference $REF s)"
 else bad "simulated time '${got:-none}' differs from reference $REF s"; fi
 
-echo "== 3/3 interposition symbols"
+echo "== 3/4 interposition symbols"
 if [[ -f "$so" ]]; then
   syms="$(nm -D "$so")"
   c="$(grep -c ' T cuda' <<< "$syms")"; m="$(grep -c ' W MPI_' <<< "$syms")"
@@ -32,6 +32,11 @@ if [[ -f "$so" ]]; then
     && ok "smpi_execute_benched left undefined (resolved by SimGrid)" \
     || bad "smpi_execute_benched is not an undefined symbol"
 else bad "no object at $so"; fi
+
+echo "== 4/4 more ranks than hosts"
+if bash "$root/run_cuda_mpi.sh" "$root/examples/simple/simple.cu" -np 9 > "$tmp/np.log" 2>&1; then bad "-np 9 ran on 8 hosts"
+elif grep -q "ERROR: You requested to use 9 ranks" "$tmp/np.log"; then ok "-np 9 refused on 8 hosts"
+else bad "-np 9 failed for another reason:"; tail -5 "$tmp/np.log"; fi
 
 echo
 if [[ "$fail" == 0 ]]; then echo "all checks passed"; else echo "$fail check(s) failed"; fi

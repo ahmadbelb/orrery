@@ -29,6 +29,13 @@ fi
 if [[ -z "${ORRERY_TRANSFER_CONFIG:-}" && -f "$MACHINE/transfers.conf" ]]; then
   export ORRERY_TRANSFER_CONFIG="$MACHINE/transfers.conf"
 fi
+if [[ "$BUILD_ONLY" == 0 && -f "$HF" ]]; then
+  slots="$(awk -F: 'NF { n += (NF > 1 ? $2 : 1) } END { print n + 0 }' "$HF")"
+  if [[ "$NP" -gt "$slots" ]]; then
+    printf '\033[31mERROR: You requested to use %s ranks, but there is only %s processes in your hostfile...\033[0m\n' "$NP" "$slots" >&2
+    exit 1
+  fi
+fi
 
 SMPI_FLAGS=()
 if [[ -n "$FLAGSFILE" ]]; then

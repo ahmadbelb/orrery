@@ -1,0 +1,38 @@
+name: ci
+on:
+  push:
+    branches: [main]
+    tags: ['*']
+  pull_request:
+permissions:
+  contents: read
+  packages: write
+jobs:
+  image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build (the Dockerfile runs ctest as its last step)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          tags: orrery:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Smoke test again from the finished image
+        run: docker run --rm orrery:ci ctest --test-dir build --output-on-failure
+      - name: Log in to GHCR
+        if: github.event_name == 'push'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push
+        if: github.event_name == 'push'
+        run: |
+          IMG=ghcr.io/${{ github.repository_owner }}/orrery
+          TAG=${GITHUB_REF_NAME}; [ "$TAG" = main ] && TAG=latest
+          docker tag orrery:ci "$IMG:$TAG" && docker push "$IMG:$TAG"

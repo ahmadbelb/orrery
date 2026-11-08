@@ -1,0 +1,2 @@
+--cfg=smpi/lat-factor:0:1.0
+--cfg=smpi/bw-factor:0:1.0

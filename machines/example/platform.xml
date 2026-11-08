@@ -1,0 +1,105 @@
+<?xml version='1.0'?>
+<!DOCTYPE platform SYSTEM "https://simgrid.org/simgrid.dtd">
+<platform version="4.1">
+  <config>
+    <prop id="network/crosstraffic" value="0"/>
+    <prop id="network/weight-S"     value="0.0"/>
+    <prop id="network/TCP-gamma"    value="0.0"/>
+  </config>
+  <zone id="world" routing="Full">
+    <host id="n0g0" speed="100Gf"/>
+    <host id="n0g1" speed="100Gf"/>
+    <host id="n0g2" speed="100Gf"/>
+    <host id="n0g3" speed="100Gf"/>
+    <host id="n1g0" speed="100Gf"/>
+    <host id="n1g1" speed="100Gf"/>
+    <host id="n1g2" speed="100Gf"/>
+    <host id="n1g3" speed="100Gf"/>
+    <link id="backbone" sharing_policy="SHARED" bandwidth="1e+15Bps" latency="0ns"/>
+    <link id="lo" sharing_policy="FATPIPE" bandwidth="1e+15Bps" latency="0ns"/>
+    <link id="up_0_0" sharing_policy="SPLITDUPLEX" bandwidth="2.5e+10Bps" latency="4000ns"/>
+    <link id="up_0_1" sharing_policy="SPLITDUPLEX" bandwidth="2.5e+10Bps" latency="4000ns"/>
+    <link id="up_0_2" sharing_policy="SPLITDUPLEX" bandwidth="2.5e+10Bps" latency="4000ns"/>
+    <link id="up_0_3" sharing_policy="SPLITDUPLEX" bandwidth="2.5e+10Bps" latency="4000ns"/>
+    <link id="nvl_0_01" sharing_policy="SPLITDUPLEX" bandwidth="1e+11Bps" latency="2000ns"/>
+    <link id="nvl_0_02" sharing_policy="SPLITDUPLEX" bandwidth="1e+11Bps" latency="2000ns"/>
+    <link id="nvl_0_03" sharing_policy="SPLITDUPLEX" bandwidth="1e+11Bps" latency="2000ns"/>
+    <link id="nvl_0_12" sharing_policy="SPLITDUPLEX" bandwidth="1e+11Bps" latency="2000ns"/>
+    <link id="nvl_0_13" sharing_policy="SPLITDUPLEX" bandwidth="1e+11Bps" latency="2000ns"/>
+    <link id="nvl_0_23" sharing_policy="SPLITDUPLEX" bandwidth="1e+11Bps" latency="2000ns"/>
+    <link id="up_1_0" sharing_policy="SPLITDUPLEX" bandwidth="2.5e+10Bps" latency="4000ns"/>
+    <link id="up_1_1" sharing_policy="SPLITDUPLEX" bandwidth="2.5e+10Bps" latency="4000ns"/>
+    <link id="up_1_2" sharing_policy="SPLITDUPLEX" bandwidth="2.5e+10Bps" latency="4000ns"/>
+    <link id="up_1_3" sharing_policy="SPLITDUPLEX" bandwidth="2.5e+10Bps" latency="4000ns"/>
+    <link id="nvl_1_01" sharing_policy="SPLITDUPLEX" bandwidth="1e+11Bps" latency="2000ns"/>
+    <link id="nvl_1_02" sharing_policy="SPLITDUPLEX" bandwidth="1e+11Bps" latency="2000ns"/>
+    <link id="nvl_1_03" sharing_policy="SPLITDUPLEX" bandwidth="1e+11Bps" latency="2000ns"/>
+    <link id="nvl_1_12" sharing_policy="SPLITDUPLEX" bandwidth="1e+11Bps" latency="2000ns"/>
+    <link id="nvl_1_13" sharing_policy="SPLITDUPLEX" bandwidth="1e+11Bps" latency="2000ns"/>
+    <link id="nvl_1_23" sharing_policy="SPLITDUPLEX" bandwidth="1e+11Bps" latency="2000ns"/>
+    <route src="n0g0" dst="n0g0"><link_ctn id="lo"/></route>
+    <route src="n0g1" dst="n0g1"><link_ctn id="lo"/></route>
+    <route src="n0g2" dst="n0g2"><link_ctn id="lo"/></route>
+    <route src="n0g3" dst="n0g3"><link_ctn id="lo"/></route>
+    <route src="n0g0" dst="n0g1" symmetrical="NO"><link_ctn id="nvl_0_01" direction="UP"/></route>
+    <route src="n0g1" dst="n0g0" symmetrical="NO"><link_ctn id="nvl_0_01" direction="DOWN"/></route>
+    <route src="n0g0" dst="n0g2" symmetrical="NO"><link_ctn id="nvl_0_02" direction="UP"/></route>
+    <route src="n0g2" dst="n0g0" symmetrical="NO"><link_ctn id="nvl_0_02" direction="DOWN"/></route>
+    <route src="n0g0" dst="n0g3" symmetrical="NO"><link_ctn id="nvl_0_03" direction="UP"/></route>
+    <route src="n0g3" dst="n0g0" symmetrical="NO"><link_ctn id="nvl_0_03" direction="DOWN"/></route>
+    <route src="n0g1" dst="n0g2" symmetrical="NO"><link_ctn id="nvl_0_12" direction="UP"/></route>
+    <route src="n0g2" dst="n0g1" symmetrical="NO"><link_ctn id="nvl_0_12" direction="DOWN"/></route>
+    <route src="n0g1" dst="n0g3" symmetrical="NO"><link_ctn id="nvl_0_13" direction="UP"/></route>
+    <route src="n0g3" dst="n0g1" symmetrical="NO"><link_ctn id="nvl_0_13" direction="DOWN"/></route>
+    <route src="n0g2" dst="n0g3" symmetrical="NO"><link_ctn id="nvl_0_23" direction="UP"/></route>
+    <route src="n0g3" dst="n0g2" symmetrical="NO"><link_ctn id="nvl_0_23" direction="DOWN"/></route>
+    <route src="n1g0" dst="n1g0"><link_ctn id="lo"/></route>
+    <route src="n1g1" dst="n1g1"><link_ctn id="lo"/></route>
+    <route src="n1g2" dst="n1g2"><link_ctn id="lo"/></route>
+    <route src="n1g3" dst="n1g3"><link_ctn id="lo"/></route>
+    <route src="n1g0" dst="n1g1" symmetrical="NO"><link_ctn id="nvl_1_01" direction="UP"/></route>
+    <route src="n1g1" dst="n1g0" symmetrical="NO"><link_ctn id="nvl_1_01" direction="DOWN"/></route>
+    <route src="n1g0" dst="n1g2" symmetrical="NO"><link_ctn id="nvl_1_02" direction="UP"/></route>
+    <route src="n1g2" dst="n1g0" symmetrical="NO"><link_ctn id="nvl_1_02" direction="DOWN"/></route>
+    <route src="n1g0" dst="n1g3" symmetrical="NO"><link_ctn id="nvl_1_03" direction="UP"/></route>
+    <route src="n1g3" dst="n1g0" symmetrical="NO"><link_ctn id="nvl_1_03" direction="DOWN"/></route>
+    <route src="n1g1" dst="n1g2" symmetrical="NO"><link_ctn id="nvl_1_12" direction="UP"/></route>
+    <route src="n1g2" dst="n1g1" symmetrical="NO"><link_ctn id="nvl_1_12" direction="DOWN"/></route>
+    <route src="n1g1" dst="n1g3" symmetrical="NO"><link_ctn id="nvl_1_13" direction="UP"/></route>
+    <route src="n1g3" dst="n1g1" symmetrical="NO"><link_ctn id="nvl_1_13" direction="DOWN"/></route>
+    <route src="n1g2" dst="n1g3" symmetrical="NO"><link_ctn id="nvl_1_23" direction="UP"/></route>
+    <route src="n1g3" dst="n1g2" symmetrical="NO"><link_ctn id="nvl_1_23" direction="DOWN"/></route>
+    <route src="n0g0" dst="n1g0" symmetrical="NO"><link_ctn id="up_0_0" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_1_0" direction="DOWN"/></route>
+    <route src="n0g0" dst="n1g1" symmetrical="NO"><link_ctn id="up_0_0" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_1_1" direction="DOWN"/></route>
+    <route src="n0g0" dst="n1g2" symmetrical="NO"><link_ctn id="up_0_0" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_1_2" direction="DOWN"/></route>
+    <route src="n0g0" dst="n1g3" symmetrical="NO"><link_ctn id="up_0_0" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_1_3" direction="DOWN"/></route>
+    <route src="n0g1" dst="n1g0" symmetrical="NO"><link_ctn id="up_0_1" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_1_0" direction="DOWN"/></route>
+    <route src="n0g1" dst="n1g1" symmetrical="NO"><link_ctn id="up_0_1" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_1_1" direction="DOWN"/></route>
+    <route src="n0g1" dst="n1g2" symmetrical="NO"><link_ctn id="up_0_1" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_1_2" direction="DOWN"/></route>
+    <route src="n0g1" dst="n1g3" symmetrical="NO"><link_ctn id="up_0_1" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_1_3" direction="DOWN"/></route>
+    <route src="n0g2" dst="n1g0" symmetrical="NO"><link_ctn id="up_0_2" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_1_0" direction="DOWN"/></route>
+    <route src="n0g2" dst="n1g1" symmetrical="NO"><link_ctn id="up_0_2" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_1_1" direction="DOWN"/></route>
+    <route src="n0g2" dst="n1g2" symmetrical="NO"><link_ctn id="up_0_2" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_1_2" direction="DOWN"/></route>
+    <route src="n0g2" dst="n1g3" symmetrical="NO"><link_ctn id="up_0_2" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_1_3" direction="DOWN"/></route>
+    <route src="n0g3" dst="n1g0" symmetrical="NO"><link_ctn id="up_0_3" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_1_0" direction="DOWN"/></route>
+    <route src="n0g3" dst="n1g1" symmetrical="NO"><link_ctn id="up_0_3" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_1_1" direction="DOWN"/></route>
+    <route src="n0g3" dst="n1g2" symmetrical="NO"><link_ctn id="up_0_3" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_1_2" direction="DOWN"/></route>
+    <route src="n0g3" dst="n1g3" symmetrical="NO"><link_ctn id="up_0_3" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_1_3" direction="DOWN"/></route>
+    <route src="n1g0" dst="n0g0" symmetrical="NO"><link_ctn id="up_1_0" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_0_0" direction="DOWN"/></route>
+    <route src="n1g0" dst="n0g1" symmetrical="NO"><link_ctn id="up_1_0" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_0_1" direction="DOWN"/></route>
+    <route src="n1g0" dst="n0g2" symmetrical="NO"><link_ctn id="up_1_0" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_0_2" direction="DOWN"/></route>
+    <route src="n1g0" dst="n0g3" symmetrical="NO"><link_ctn id="up_1_0" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_0_3" direction="DOWN"/></route>
+    <route src="n1g1" dst="n0g0" symmetrical="NO"><link_ctn id="up_1_1" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_0_0" direction="DOWN"/></route>
+    <route src="n1g1" dst="n0g1" symmetrical="NO"><link_ctn id="up_1_1" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_0_1" direction="DOWN"/></route>
+    <route src="n1g1" dst="n0g2" symmetrical="NO"><link_ctn id="up_1_1" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_0_2" direction="DOWN"/></route>
+    <route src="n1g1" dst="n0g3" symmetrical="NO"><link_ctn id="up_1_1" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_0_3" direction="DOWN"/></route>
+    <route src="n1g2" dst="n0g0" symmetrical="NO"><link_ctn id="up_1_2" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_0_0" direction="DOWN"/></route>
+    <route src="n1g2" dst="n0g1" symmetrical="NO"><link_ctn id="up_1_2" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_0_1" direction="DOWN"/></route>
+    <route src="n1g2" dst="n0g2" symmetrical="NO"><link_ctn id="up_1_2" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_0_2" direction="DOWN"/></route>
+    <route src="n1g2" dst="n0g3" symmetrical="NO"><link_ctn id="up_1_2" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_0_3" direction="DOWN"/></route>
+    <route src="n1g3" dst="n0g0" symmetrical="NO"><link_ctn id="up_1_3" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_0_0" direction="DOWN"/></route>
+    <route src="n1g3" dst="n0g1" symmetrical="NO"><link_ctn id="up_1_3" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_0_1" direction="DOWN"/></route>
+    <route src="n1g3" dst="n0g2" symmetrical="NO"><link_ctn id="up_1_3" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_0_2" direction="DOWN"/></route>
+    <route src="n1g3" dst="n0g3" symmetrical="NO"><link_ctn id="up_1_3" direction="UP"/><link_ctn id="backbone"/><link_ctn id="up_0_3" direction="DOWN"/></route>
+  </zone>
+</platform>

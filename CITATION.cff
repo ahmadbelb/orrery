@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use Orrery, please cite the paper below."
+title: "Orrery"
+type: software
+repository-code: "https://github.com/ahmadbelb/orrery"
+license: MIT
+authors:
+  - family-names: "Belbeisi"
+    given-names: "Ahmad Moh'd Saleh A."
+    affiliation: "Technical University of Munich"
+  - family-names: "Raoofy"
+    given-names: "Amir"
+    affiliation: "Leibniz Supercomputing Centre"
+  - family-names: "Weidendorfer"
+    given-names: "Josef"
+    affiliation: "Dresden University of Technology"
+  - family-names: "Salimi Beni"
+    given-names: "Majid"
+    affiliation: "Vienna University of Technology"
+preferred-citation:
+  type: conference-paper
+  title: "Orrery: Modeling and Simulation of GPU-direct MPI Communication with SimGrid"
+  authors:
+    - family-names: "Belbeisi"
+      given-names: "Ahmad Moh'd Saleh A."
+    - family-names: "Raoofy"
+      given-names: "Amir"
+    - family-names: "Weidendorfer"
+      given-names: "Josef"
+    - family-names: "Salimi Beni"
+      given-names: "Majid"
+  collection-title: "PMBS 2026: International Workshop on Performance Modeling, Benchmarking and Simulation of High Performance Computer Systems, held in conjunction with SC26"
+  year: 2026

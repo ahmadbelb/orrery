@@ -116,25 +116,33 @@ ctest --test-dir build -R conf_
 ctest --test-dir build -R '^test_cudaMemcpy$' -V
 ```
 
-These run all 61 tests (about 15 seconds), one group, and one test showing each
-check. In Docker, put `docker run --rm orrery` in front.
+The first command runs all 61 tests (about 15 seconds). The second runs only the
+tests with `conf_` in their name. The third runs one test and prints every check.
+In Docker, put `docker run --rm orrery` in front.
 
-You don't need to adjust anything to run them. They use their own values from
-`tests/`, not your machine folder. To try a parameter, change it where the table
-says:
+You don't need to change anything to run them. The tests have their own settings in
+`tests/transfers_test.conf`, separate from your machine folder. To see how a
+parameter behaves, edit it there and rerun the test that uses it:
 
-| Tests | What they check | Where the values are |
+| Test | What it checks | Parameters it uses |
 |---|---|---|
-| `test_cuda*` | CUDA calls | `tests/transfers_test.conf`: `h2d.*`, `d2h.*`, `d2d.*` (`cudaMemcpy`), `peer.path` (`cudaMemcpyPeer`), `gpu.flops_*` (`cudaLaunchKernel`), `gpu.count`, `gpu.mem_bytes` (device queries) |
-| `test_MPI_*` | MPI calls on GPU buffers | `tests/transfers_test.conf`: `mpi.device_path`, `h2d.*`, `d2h.*`, `staging.share` |
-| `test_conf_*` | Config keys and `ORRERY_*` variables, named after the key: `test_conf_path_gdr` checks `gdr.*` | `tests/conf/<test>.conf` and `.env` |
-| `test_e2e_wire_timing` | Simulated network time | `tests/platform_test.xml` |
-| `*_real` | The same calls with a real GPU; skipped without one | As for the groups above |
-| `smoke` | The example, against 0.005223 s | `machines/example` |
+| `test_cudaMemcpy` | Time of a copy between host and GPU, or inside a GPU | `h2d.latency` and `h2d.bandwidth` for host to GPU, `d2h.*` for GPU to host, `d2d.*` for inside a GPU |
+| `test_cudaMemcpyPeer` | Time of a copy between two GPUs | `peer.path`, the link to use: `nvlink` or `pcie` |
+| `test_cudaLaunchKernel` | Time of a kernel | `gpu.flops_rate`, the GPU's speed, and `gpu.flops_per_thread`, the work per GPU thread |
+| `test_cudaGetDeviceCount`, `test_cudaMemGetInfo`, `test_cudaGetDeviceProperties` | The GPU count and memory size an application sees | `gpu.count`, `gpu.mem_bytes` |
+| `test_MPI_*` | Time of each MPI call on a GPU buffer | `mpi.device_path`, how MPI moves GPU data; `h2d.*` and `d2h.*`; `staging.share`, the slowdown when all GPUs on a node copy at once |
+| `test_e2e_wire_timing` | Time of a message across the network | The link in `tests/platform_test.xml` |
+| `test_conf_*` | That each setting and `ORRERY_*` variable is read correctly; `test_conf_path_gdr` checks `gdr.*`, for example | The test's own file in `tests/conf/` |
+| `*_real` | The same calls on a real GPU; skipped if there is none | Same as the test without `_real` |
+| `smoke` | The whole tool: the example must give 0.005223 s | `machines/example`, the only test that uses it |
 
-`test_MPI_*` and `test_cudaMemcpy` compare against the model, so they pass with any
-value; use `-V` to see the new times. Most of the others expect fixed numbers, so a
-failure after you change a value they use is normal.
+The other `test_cuda*` tests check calls like `cudaMalloc` and have no parameter of
+their own.
+
+`test_cudaMemcpy` and `test_MPI_*` work out the expected time from the same
+settings, so they keep passing with any value; add `-V` to see the times change.
+Most of the other tests expect fixed numbers, so they fail if you change a value
+they use. That is expected.
 
 ## Limits
 
@@ -143,7 +151,12 @@ runtime API. Device work is charged synchronously, so overlap with communication
 not modelled. CUDA calls it does not intercept go to the real runtime and fail
 without a GPU.
 
-## Citing
+## Publications
+
+Orrery has been accepted at PMBS 2026, the International Workshop on Performance
+Modeling, Benchmarking and Simulation of High Performance Computer Systems, held
+with SC26. The paper is also available on
+[arXiv](https://arxiv.org/abs/2610.18565). If you use Orrery, please cite it:
 
 ```bibtex
 @misc{belbeisi2026orrerymodelingsimulationgpudirect,

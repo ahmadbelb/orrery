@@ -27,19 +27,16 @@ endif()
 
 project(orrery VERSION 1.0 LANGUAGES CXX CUDA)
 
-if(DEFINED ENV{SIMGRID_PREFIX})
-  set(_sg_default "$ENV{SIMGRID_PREFIX}")
-else()
-  set(_sg_default "/usr/local")
-endif()
-set(SIMGRID_PREFIX "${_sg_default}" CACHE PATH "SimGrid installation (built with SMPI)")
-find_path(SIMGRID_INCLUDE_DIR smpi/smpi.h HINTS "${SIMGRID_PREFIX}/include")
-find_library(SIMGRID_LIBRARY simgrid HINTS "${SIMGRID_PREFIX}/lib" "${SIMGRID_PREFIX}/lib64")
-find_program(SMPIRUN smpirun HINTS "${SIMGRID_PREFIX}/bin")
+set(SIMGRID_PREFIX "" CACHE PATH "SimGrid installation (built with SMPI)")
+set(_sg ${SIMGRID_PREFIX} $ENV{SIMGRID_PREFIX} /usr/local)
+find_path(SIMGRID_INCLUDE_DIR smpi/smpi.h HINTS ${_sg} PATH_SUFFIXES include)
+find_library(SIMGRID_LIBRARY simgrid HINTS ${_sg} PATH_SUFFIXES lib lib64)
+find_program(SMPIRUN smpirun HINTS ${_sg} PATH_SUFFIXES bin)
 if(NOT SIMGRID_INCLUDE_DIR OR NOT SIMGRID_LIBRARY OR NOT SMPIRUN)
-  message(FATAL_ERROR "SimGrid with SMPI not found under ${SIMGRID_PREFIX} "
+  list(JOIN _sg ", " _sg_list)
+  message(FATAL_ERROR "SimGrid with SMPI not found in ${_sg_list} "
                       "(need include/smpi/smpi.h, lib/libsimgrid.so, bin/smpirun). "
-                      "Set -DSIMGRID_PREFIX=<prefix>; see README.md.")
+                      "Set SIMGRID_PREFIX to the folder you installed it in; see README.md.")
 endif()
 find_package(CUDAToolkit REQUIRED)
 message(STATUS "SimGrid: ${SIMGRID_LIBRARY}  smpirun: ${SMPIRUN}")

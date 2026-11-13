@@ -54,6 +54,9 @@ GPU_ARCH="${GPU_ARCH:-sm_80}"
 if [[ -z "${HOST_CXX:-}" ]]; then
   if command -v g++-13 >/dev/null 2>&1; then HOST_CXX=g++-13; else HOST_CXX=g++; fi
 fi
+if [[ -z "${SIMGRID_PREFIX:-}" ]] && command -v smpirun > /dev/null; then
+  SIMGRID_PREFIX="$(dirname "$(dirname "$(command -v smpirun)")")"
+fi
 SG="${SIMGRID_PREFIX:-/usr/local}"
 bdir="${ORRERY_BUILD_DIR:-$here/build}"; mkdir -p "$bdir"
 out="${OUTSO:-$bdir/$(basename "${APP%.*}")_smpi.so}"

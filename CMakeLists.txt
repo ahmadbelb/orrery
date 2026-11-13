@@ -40,15 +40,18 @@ if(CMAKE_CUDA_COMPILER_VERSION VERSION_LESS 12 OR CMAKE_CUDA_COMPILER_VERSION VE
 endif()
 
 set(SIMGRID_PREFIX "" CACHE PATH "SimGrid installation (built with SMPI)")
-set(_sg ${SIMGRID_PREFIX} $ENV{SIMGRID_PREFIX} /usr/local)
+set(_sg ${SIMGRID_PREFIX} $ENV{SIMGRID_PREFIX})
+find_program(SMPIRUN smpirun HINTS ${_sg} PATH_SUFFIXES bin)
+if(SMPIRUN)
+  get_filename_component(_sg_root "${SMPIRUN}" DIRECTORY)
+  get_filename_component(_sg_root "${_sg_root}" DIRECTORY)
+  list(APPEND _sg "${_sg_root}")
+endif()
 find_path(SIMGRID_INCLUDE_DIR smpi/smpi.h HINTS ${_sg} PATH_SUFFIXES include)
 find_library(SIMGRID_LIBRARY simgrid HINTS ${_sg} PATH_SUFFIXES lib lib64)
-find_program(SMPIRUN smpirun HINTS ${_sg} PATH_SUFFIXES bin)
 if(NOT SIMGRID_INCLUDE_DIR OR NOT SIMGRID_LIBRARY OR NOT SMPIRUN)
-  list(JOIN _sg ", " _sg_list)
-  message(FATAL_ERROR "SimGrid with SMPI not found in ${_sg_list} "
-                      "(need include/smpi/smpi.h, lib/libsimgrid.so, bin/smpirun). "
-                      "Set SIMGRID_PREFIX to the folder you installed it in; see README.md.")
+  message(FATAL_ERROR "SimGrid with SMPI not found (need include/smpi/smpi.h, lib/libsimgrid.so, bin/smpirun). "
+                      "Put its bin folder on PATH, or set SIMGRID_PREFIX to the folder you installed it in; see README.md.")
 endif()
 find_package(CUDAToolkit REQUIRED)
 message(STATUS "SimGrid: ${SIMGRID_LIBRARY}  smpirun: ${SMPIRUN}")

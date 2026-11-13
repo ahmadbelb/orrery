@@ -52,9 +52,8 @@ Building the image yourself with `docker build` avoids the emulation.
 This needs no root access. You need a C++ compiler, CMake, git, Python 3, Boost and
 the [CUDA 12 toolkit](https://developer.nvidia.com/cuda-12-4-0-download-archive)
 (tested with 12.4; no driver or GPU needed; CUDA 13 does not work yet) with a `g++`
-it accepts (13 or older). On a shared machine these usually come from
-`module load`. If the toolkit is not in `/usr/local/cuda` or on your `PATH`, or you
-have several versions, set `CUDA_HOME` to the CUDA 12 folder.
+it accepts (13 or older; Orrery uses `g++-13` by itself when it is installed). On a
+shared machine these usually come from `module load`.
 
 Build SimGrid into your home folder:
 
@@ -67,12 +66,12 @@ make -j"$(nproc)" install
 cd ..
 ```
 
-Tell your shell where it is. Add these lines to `~/.bashrc` to keep them:
+Tell your shell where SimGrid and CUDA 12 are. Change `/usr/local/cuda-12.4` if
+your CUDA 12 is somewhere else, and add these lines to `~/.bashrc` to keep them:
 
 ```bash
-export SIMGRID_PREFIX=$HOME/opt/simgrid
-export PATH=$SIMGRID_PREFIX/bin:$PATH
-export LD_LIBRARY_PATH=$SIMGRID_PREFIX/lib:$LD_LIBRARY_PATH
+export CUDA_HOME=/usr/local/cuda-12.4
+export PATH=$HOME/opt/simgrid/bin:$CUDA_HOME/bin:$PATH
 ```
 
 Then, in this repository:
@@ -82,6 +81,14 @@ cmake -S . -B build
 cmake --build build -j
 ctest --test-dir build
 cmake --build build --target example
+```
+
+CMake remembers what it found the first time, so after changing any of this start
+again with `rm -rf build`. If it still picks the wrong CUDA, compiler or SimGrid,
+name them yourself:
+
+```bash
+cmake -S . -B build -DCMAKE_CUDA_COMPILER=$CUDA_HOME/bin/nvcc -DCMAKE_CXX_COMPILER=g++-13 -DCMAKE_CUDA_HOST_COMPILER=g++-13 -DSIMGRID_PREFIX=$HOME/opt/simgrid
 ```
 
 ## Run your own application

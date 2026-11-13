@@ -50,10 +50,10 @@ Building the image yourself with `docker build` avoids the emulation.
 ## Install without Docker
 
 This needs no root access. You need a C++ compiler, CMake, git, Python 3, Boost and
-the [CUDA 12 toolkit](https://developer.nvidia.com/cuda-12-4-0-download-archive)
-(tested with 12.4; no driver or GPU needed; CUDA 13 does not work yet) with a `g++`
-it accepts (13 or older; Orrery uses `g++-13` by itself when it is installed). On a
-shared machine these usually come from `module load`.
+the [CUDA 12 toolkit](https://developer.nvidia.com/cuda-toolkit-archive), any 12.x
+(tested with 12.4 and 12.9; no driver or GPU needed; CUDA 13 does not work yet)
+with a `g++` it accepts (13 or older; Orrery uses `g++-13` by itself when it is
+installed). On a shared machine these usually come from `module load`.
 
 Build SimGrid into your home folder:
 

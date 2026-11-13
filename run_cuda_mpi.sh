@@ -28,6 +28,7 @@ if ! command -v nvcc > /dev/null && [[ -x /usr/local/cuda/bin/nvcc ]]; then PATH
 command -v nvcc > /dev/null || { printf '\033[31mERROR: nvcc not found. Install CUDA 12, or set CUDA_HOME to its folder; see README.md\033[0m\n' >&2; exit 1; }
 cuda_v="$(nvcc --version | sed -n 's/.*release \([0-9][0-9.]*\),.*/\1/p')"
 [[ "${cuda_v%%.*}" == 12 ]] || { printf '\033[31mERROR: CUDA %s found, Orrery needs CUDA 12 (tested with 12.4). Set CUDA_HOME to a CUDA 12 folder; see README.md\033[0m\n' "${cuda_v:-unknown}" >&2; exit 1; }
+cuda_lib="$(cd "$(dirname "$(command -v nvcc)")/.." && pwd)/lib64"
 
 if [[ -z "$PLAT" && -z "$HF" && -z "$FLAGSFILE" ]]; then
   PLAT="$MACHINE/platform.xml"; HF="$MACHINE/hostfile"
@@ -84,7 +85,7 @@ nvcc -ccbin "$HOST_CXX" -arch="$GPU_ARCH" -DSMPI_NO_OVERRIDE_MALLOC \
   --pre-include "$here/include/mpi-ext.h" \
   -I"$SG/include" -I"$SG/include/smpi" \
   "$APP" ${EXTRA_SRCS:-} "$interp_o" "$xfer_o" -Xlinker -Bsymbolic \
-  -L"$SG/lib" -lsimgrid -lcudart -lm -ldl -o "$out"
+  -L"$SG/lib" -lsimgrid -Xlinker -rpath -Xlinker "$cuda_lib" -lcudart -lm -ldl -o "$out"
 [[ -f "$out" ]] || { echo "build failed"; exit 1; }
 if [[ "$BUILD_ONLY" == 1 ]]; then echo ">> built $out"; exit 0; fi
 

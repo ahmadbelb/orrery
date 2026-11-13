@@ -62,7 +62,7 @@ Build SimGrid into your home folder:
 git clone https://framagit.org/simgrid/simgrid.git
 cd simgrid
 git checkout 1ea158bafc
-cmake -DCMAKE_INSTALL_PREFIX=$HOME/opt/simgrid -Denable_smpi=ON -Denable_documentation=OFF -Denable_sthread=OFF .
+cmake -DCMAKE_INSTALL_PREFIX=$HOME/opt/simgrid -DCMAKE_INSTALL_LIBDIR=lib -Denable_smpi=ON -Denable_documentation=OFF -Denable_sthread=OFF .
 make -j"$(nproc)" install
 cd ..
 ```

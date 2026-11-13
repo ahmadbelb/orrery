@@ -50,9 +50,11 @@ Building the image yourself with `docker build` avoids the emulation.
 ## Install without Docker
 
 This needs no root access. You need a C++ compiler, CMake, git, Python 3, Boost and
-the [CUDA toolkit](https://developer.nvidia.com/cuda-downloads) (tested with 12.4;
-no driver or GPU needed) with a `g++` it accepts (13 or older for CUDA 12). On a
-shared machine these usually come from `module load`.
+the [CUDA 12 toolkit](https://developer.nvidia.com/cuda-12-4-0-download-archive)
+(tested with 12.4; no driver or GPU needed; CUDA 13 does not work yet) with a `g++`
+it accepts (13 or older). On a shared machine these usually come from
+`module load`. If the toolkit is not in `/usr/local/cuda` or on your `PATH`, or you
+have several versions, set `CUDA_HOME` to the CUDA 12 folder.
 
 Build SimGrid into your home folder:
 

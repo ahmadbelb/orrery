@@ -24,8 +24,20 @@ if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
     endif()
   endif()
 endif()
+if(NOT DEFINED CMAKE_CUDA_COMPILER AND NOT DEFINED ENV{CUDACXX})
+  find_program(ORRERY_NVCC nvcc HINTS ENV CUDA_HOME ENV CUDA_PATH PATH_SUFFIXES bin PATHS /usr/local/cuda/bin)
+  if(NOT ORRERY_NVCC)
+    message(FATAL_ERROR "nvcc not found. Orrery needs the CUDA toolkit to compile CUDA code "
+                        "(no GPU or driver needed). Install it, or set CUDA_HOME to its folder; see README.md.")
+  endif()
+  set(CMAKE_CUDA_COMPILER "${ORRERY_NVCC}" CACHE FILEPATH "CUDA compiler")
+endif()
 
 project(orrery VERSION 1.0 LANGUAGES CXX CUDA)
+if(CMAKE_CUDA_COMPILER_VERSION VERSION_LESS 12 OR CMAKE_CUDA_COMPILER_VERSION VERSION_GREATER_EQUAL 13)
+  message(FATAL_ERROR "CUDA ${CMAKE_CUDA_COMPILER_VERSION} found (${CMAKE_CUDA_COMPILER}). Orrery needs CUDA 12 "
+                      "(tested with 12.4). Install it, set CUDA_HOME to its folder and use a new build folder; see README.md.")
+endif()
 
 set(SIMGRID_PREFIX "" CACHE PATH "SimGrid installation (built with SMPI)")
 set(_sg ${SIMGRID_PREFIX} $ENV{SIMGRID_PREFIX} /usr/local)

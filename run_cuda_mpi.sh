@@ -21,6 +21,13 @@ done
 for p in "$here" "$APP" "$MACHINE" "$PLAT" "$HF" "$OUTSO" "${ORRERY_BUILD_DIR:-}"; do
   [[ "$p" != *[[:space:]]* ]] || { echo "path contains whitespace, which smpirun cannot handle: $p"; exit 1; }
 done
+for d in "${CUDA_HOME:-}" "${CUDA_PATH:-}"; do
+  if [[ -n "$d" && -x "$d/bin/nvcc" ]]; then PATH="$d/bin:$PATH"; break; fi
+done
+if ! command -v nvcc > /dev/null && [[ -x /usr/local/cuda/bin/nvcc ]]; then PATH="/usr/local/cuda/bin:$PATH"; fi
+command -v nvcc > /dev/null || { printf '\033[31mERROR: nvcc not found. Install CUDA 12, or set CUDA_HOME to its folder; see README.md\033[0m\n' >&2; exit 1; }
+cuda_v="$(nvcc --version | sed -n 's/.*release \([0-9][0-9.]*\),.*/\1/p')"
+[[ "${cuda_v%%.*}" == 12 ]] || { printf '\033[31mERROR: CUDA %s found, Orrery needs CUDA 12 (tested with 12.4). Set CUDA_HOME to a CUDA 12 folder; see README.md\033[0m\n' "${cuda_v:-unknown}" >&2; exit 1; }
 
 if [[ -z "$PLAT" && -z "$HF" && -z "$FLAGSFILE" ]]; then
   PLAT="$MACHINE/platform.xml"; HF="$MACHINE/hostfile"
